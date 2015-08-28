@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loading content with AJAX</title>
+    <meta charset="utf-8">
+    <script src="../javascripts/jquery-2.1.1.min.js"></script>
+    
+    
+    <script  type="text/javascript">
+        $(document).ready(function() {
+		    $.ajax({
+		        type: 'GET',
+		        url: '/api/list',
+		        dataType: "json",
+		        //async:false,
+		        success: function(data) {
+		            console.log(">>>>>>"+data);
+		            var searchResults = ('#searchResults tbody');
+		            $(searchResults).empty();
+		            for (var i = 0; i < data.length; i++) {
+		               var html = $.map(data, function (item, i) {
+						  return "<tr>"
+						  	
+						  	+"<td>" 
+						  	+ item.serialNumber 
+						  	+ "</td><td>" 
+						  	+ item.lcoName 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ item.lcoCode 
+						  	+ "</td><td>" 
+						  	+ item.address 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ item.jvCode 
+						  	+ "</td><td>" 
+						  	+ item.jvName 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ item.city 
+						  	+ "</td><td>" 
+						  	+ item.state 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ item.aopLocation 
+						  	+ "</td><td>" 
+						  	+ item.pincode 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ item.phone 
+						  	+ "</td><td>" 
+						  	+ item.parentCode 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ item.area 
+						  	+ "</td><td>" 
+						  	+ item.dealerTypeId 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ item.oldAopLocation 
+						  	+ "</td><td>" 
+						  	+ item.employeeId 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ item.agreementId 
+						  	+ "</td><td>" 
+						  	+ item.kycId 
+						  	+ "</td>"	
+						  	+"</tr>";
+						}).join("");
+						
+						$(searchResults).append(html);
+		            }
+		        }
+		
+		    });
+		});
+    </script>
+    
+    
+</head>
+<body>
+    	<table id="nav">
+	    	<tr>
+		    	<td><a href="../index.html">Back</a></td>
+		    	<td><a href="lcoemp.html">Add LCO</a></td>
+	    	</tr>
+    	</table>
+    		
+    	</br></br>
+        
+        
+        <table id="searchResults" border="1px">
+        	<thead>
+	        	<tr>
+	        		<td>serialNumber</td>
+	        		<td>lcoName</td>
+	        		<td>lcoCode</td>
+	        		<td>address</td>
+	        		<td>jvCode</td>
+	        		<td>jvName</td>
+	        		<td>city</td>
+	        		<td>state</td>
+	        		<td>aopLocation</td>
+	        		<td>pincode</td>
+	        		<td>phone</td>
+	        		<td>parentCode</td>
+	        		<td>area</td>
+	        		<td>dealerTypeId</td>
+	        		<td>oldAopLocation</td>
+	        		<td>employeeId</td>
+	        		<td>agreementId</td>
+	        		<td>kycId</td>
+	        	</tr>
+        	</thead>
+        	<tbody>
+        	</tbody>
+        </table>
+</body>
+</html>        

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Loading content with AJAX</title>
+        <meta charset="utf-8">
+        <script src="../javascripts/jquery-2.1.1.min.js"></script>
+        <script>
+            $( document ).ready(function() {
+            console.log( "ready! empdata" );
+            $.ajax({
+              type: 'GET',
+              url: '/api/states',
+              dataType: "json",
+              //async:false,
+              success: function(data) {
+                  $.each(data, function(index, value) {
+                      $('#state').append($('<option>').text(data[index].name).attr('value', data[index].stateId));
+            });
+            $.ajax({
+                type: 'GET',
+                url: '/api/cities/'+$('#state').val(),
+                dataType: "json",
+                //async:false,
+                success: function(data) {
+                	$('#city').empty();
+                    $.each(data, function(index, value) {
+                        $('#city').append($('<option>').text(data[index].cityName).attr('value', data[index].cityId));
+            });
+                }
+            });
+              }
+            });
+            
+            $('#state').change(function() {
+            console.log( "Handler for .select() called." );
+            $.ajax({
+              type: 'GET',
+              url: '/api/cities/'+$('#state').val(),
+              dataType: "json",
+              //async:false,
+              success: function(data) {
+              	$('#city').empty();
+                  $.each(data, function(index, value) {
+                      $('#city').append($('<option>').text(data[index].cityName).attr('value', data[index].cityId));
+            		});
+              	  }
+            	});
+            });
+            
+            $('#submitButton').click( function() {
+	            console.log(">>>>"+JSON.parse(JSON.stringify($('#lcoForm').serializeArray())));
+	            var jsonData = {};
+	            var formData = $("#lcoForm").serializeArray();
+	            $.each(formData, function() {
+		            if (jsonData[this.name]) {
+		            	if (!jsonData[this.name].push) {
+		            		jsonData[this.name] = [jsonData[this.name]];
+		            	}
+		            	jsonData[this.name].push(this.value || '');
+		            } else {
+		            	jsonData[this.name] = this.value || '';
+		            }
+	            });
+	            console.log(jsonData);
+	            console.log(JSON.stringify($('#lcoForm').serializeArray()));
+	            $.ajax({
+	               url: '/api/lco/add',
+	               type: 'POST',
+	               contentType: 'application/json',
+	               accepts: 'application/json',
+	               data: JSON.stringify(jsonData),
+	               success: function(data) {
+	               		alert("hurrah");
+	                   console.log("added...");
+	                   $('#messages').append("added successfully!!");
+	               },
+	               error: function(date) {
+	               	console.log("error...");
+	               	$('#messages').append("problem adding lco!!");
+	               }
+	            });
+	            return;
+            });
+         });
+        </script>
+    </head>
+    <body>
+        <a class="offline-button" href="../index.html">Back</a>
+        <span id="messages"></span>
+        <form id="lcoForm" action="/api/lco/add" method="POST">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>LCO Name: &nbsp;</td>
+                        <td> <input type="text" id="lcoName" name="lcoName"> </td>
+                    </tr>
+                    <tr>
+                        <td>LCO Code: &nbsp; </td>
+                        <td> <input type="text" id="lcoCode" name="lcoCode"> </td>
+                    </tr>
+                    <tr>
+                        <td>Contact Name: &nbsp; </td>
+                        <td> <input type="text" id="contactName" name="contactName"> </td>
+                    </tr>
+                    <tr>
+                        <td>Phone: &nbsp; </td>
+                        <td> <input type="text" id="phone" name="phone"> </td>
+                    </tr>
+                    <tr>
+                        <td>Address: &nbsp; </td>
+                        <td> <input type="text" id="address" name="address"> </td>
+                    </tr>
+                    <tr>
+                        <td>State: &nbsp; </td>
+                        <td> <select id="state" name="state"></select> </td>
+                    </tr>
+                    <tr>
+                        <td>City: &nbsp; </td>
+                        <td> <select id="city" name="city"></select> </td>
+                    </tr>
+                    <tr>
+                        <td>JV/Distributer Name: &nbsp; </td>
+                        <td> <select id="jvName" name="jvName"></select> </td>
+                    </tr>
+                    <tr>
+                        <td>JV/Distributer Code: &nbsp; </td>
+                        <td> <select id="jvCode" name="jvCode"></select> </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" name="submit" value="Add LCO" id="submitButton"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </body>
+</html>
