@@ -5,6 +5,7 @@
 #lco api
 
 POST	/api/lco/add				controllers.LcoController.addLcoData()
+GET		/api/lco/:lcoCode			controllers.LcoController.getLco(lcoCode : String)
 POST	/api/lco/update				controllers.LcoController.editLcoData()
 GET		/api/states				controllers.LcoController.getStates()
 GET		/api/cities/:stateId	controllers.LcoController.getCities(stateId : Long)

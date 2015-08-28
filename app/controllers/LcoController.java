@@ -28,6 +28,16 @@ import flexjson.JSONDeserializer;
  *
  */
 public class LcoController extends Controller {
+	
+	public static Result getLco(String lcoCode) {
+		Lco lco = Lco.findById(lcoCode);
+		if (null != lco) {
+			return ok(Json.toJson(lco.getVO()));
+		} else {
+			return badRequest();
+		}
+	}
+	
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result addLcoData() {
 		ObjectNode jsonRes = Json.newObject();
