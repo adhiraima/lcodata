@@ -1,6 +1,26 @@
 # --- Created by Ebean DDL
 # To stop Ebean DDL generation, remove this comment and start using Evolutions
 
+
+# --- !Downs
+
+SET FOREIGN_KEY_CHECKS=0;
+
+drop table city;
+
+drop table employee;
+
+drop table jv;
+
+drop table lco;
+
+drop table LCOMaster;
+
+drop table state;
+
+SET FOREIGN_KEY_CHECKS=1;
+
+
 # --- !Ups
 
 create table city (
@@ -61,22 +81,4 @@ create table state (
 
 
 
-
-# --- !Downs
-
-SET FOREIGN_KEY_CHECKS=0;
-
-drop table city;
-
-drop table employee;
-
-drop table jv;
-
-drop table lco;
-
-drop table LCOMaster;
-
-drop table state;
-
-SET FOREIGN_KEY_CHECKS=1;
 
