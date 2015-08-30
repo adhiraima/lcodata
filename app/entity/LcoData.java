@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import vo.LcoDataVO;
 
 import com.avaje.ebean.Model;
@@ -167,6 +169,9 @@ public class LcoData extends Model {
 		if (null != jv) {
 			vo.jvCode = jv.getJvCode();
 			vo.jvName = jv.getJvName();
+		} else {
+			vo.jvCode = StringUtils.EMPTY;
+			vo.jvName = StringUtils.EMPTY;
 		}
 		vo.dealerTypeId = this.getDealerTypeId();
 		vo.kycId = this.kycId;

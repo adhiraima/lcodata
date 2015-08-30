@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import vo.LcoVO;
 
 import com.avaje.ebean.Model;
@@ -145,8 +147,14 @@ public class Lco extends Model {
 		vo.city = this.city.toString();
 		vo.state = this.state.toString();
 		vo.contactName = this.contactName;
-		vo.jvCode = this.jvCode;
-		vo.jvName = JV.findByCJVCode(this.jvCode).getJvName();
+		JV jv = JV.findByCJVCode(this.getJvCode());
+		if (null != jv) {
+			vo.jvCode = jv.getJvCode();
+			vo.jvName = jv.getJvName();
+		} else {
+			vo.jvCode = StringUtils.EMPTY;
+			vo.jvName = StringUtils.EMPTY;
+		}
 		vo.lcoCode  = this.lcoCode;
 		vo.lcoName = Lco.findById(this.lcoCode).getLcoName();
 		vo.phone = this.phone;

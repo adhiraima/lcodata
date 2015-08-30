@@ -15,61 +15,59 @@
 		        //async:false,
 		        success: function(data) {
 		            console.log(">>>>>>"+data);
-		            var searchResults = ('#searchResults tbody');
+		            var searchResults = $('#searchResults tbody');
 		            $(searchResults).empty();
 		            for (var i = 0; i < data.length; i++) {
-		               var html = $.map(data, function (item, i) {
-						  return "<tr>"
-						  	
+		               var html = "<tr>"
 						  	+"<td>" 
-						  	+ item.serialNumber 
+						  	+ data[i].serialNumber 
 						  	+ "</td><td>" 
-						  	+ item.lcoName 
+						  	+ data[i].lcoName 
+						  	+ "</td>"
+						  	+"<td><a href=\"edit.html?lcoCode="+data[i].lcoCode+"\" >" 
+						  	+ data[i].lcoCode 
+						  	+ "</a></td><td>" 
+						  	+ data[i].address 
 						  	+ "</td>"
 						  	+"<td>" 
-						  	+ item.lcoCode 
+						  	+ data[i].jvCode 
 						  	+ "</td><td>" 
-						  	+ item.address 
+						  	+ data[i].jvName 
 						  	+ "</td>"
 						  	+"<td>" 
-						  	+ item.jvCode 
+						  	+ data[i].city 
 						  	+ "</td><td>" 
-						  	+ item.jvName 
+						  	+ data[i].state 
 						  	+ "</td>"
 						  	+"<td>" 
-						  	+ item.city 
+						  	+ data[i].aopLocation 
 						  	+ "</td><td>" 
-						  	+ item.state 
+						  	+ data[i].pincode 
 						  	+ "</td>"
 						  	+"<td>" 
-						  	+ item.aopLocation 
+						  	+ data[i].phone 
 						  	+ "</td><td>" 
-						  	+ item.pincode 
+						  	+ data[i].parentCode 
 						  	+ "</td>"
 						  	+"<td>" 
-						  	+ item.phone 
+						  	+ data[i].area 
 						  	+ "</td><td>" 
-						  	+ item.parentCode 
+						  	+ data[i].dealerTypeId 
 						  	+ "</td>"
 						  	+"<td>" 
-						  	+ item.area 
+						  	+ data[i].oldAopLocation 
 						  	+ "</td><td>" 
-						  	+ item.dealerTypeId 
+						  	+ data[i].employeeId 
 						  	+ "</td>"
 						  	+"<td>" 
-						  	+ item.oldAopLocation 
+						  	+ data[i].agreementId 
 						  	+ "</td><td>" 
-						  	+ item.employeeId 
-						  	+ "</td>"
-						  	+"<td>" 
-						  	+ item.agreementId 
-						  	+ "</td><td>" 
-						  	+ item.kycId 
+						  	+ data[i].kycId 
 						  	+ "</td>"	
 						  	+"</tr>";
-						}).join("");
 						
 						$(searchResults).append(html);
+						
 		            }
 		        }
 		

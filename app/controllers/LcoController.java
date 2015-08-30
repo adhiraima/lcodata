@@ -59,14 +59,17 @@ public class LcoController extends Controller {
 		}
 		jsonRes.put("status", "SUCCESS");
 		jsonRes.put("message", "added successfully");
-		return redirect("list.html");
+		return ok(Json.toJson(jsonRes));
 	}
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result editLcoData() {
+		Logger.info(">>>>>>>>"+request().body());
+		ObjectNode jsonRes = Json.newObject();
 		Lco payload = new JSONDeserializer<Lco>().deserialize(
                 request().body().asJson().toString(), Lco.class);
 		Ebean.update(payload);
-		return ok();
+		jsonRes.put("message", "updated successfully!!");
+		return ok(Json.toJson(jsonRes));
 	}
 	
 	public static Result uploadAggrement() {
@@ -86,6 +89,10 @@ public class LcoController extends Controller {
 		return ok(Json.toJson(vos));
 	}
 	
+	public static Result getState(Long stateId) {
+		return ok(Json.toJson(State.findById(stateId).getVO()));
+	}
+	
 	public static Result getCities(Long stateId) {
 		List<City> cities = City.findByState(stateId);
 		List<CityVO> vos = new ArrayList<CityVO>();
@@ -95,4 +102,7 @@ public class LcoController extends Controller {
 		return ok(Json.toJson(vos));
 	}
 
+	public static Result getCity(Long cityId) {
+		return ok(Json.toJson(City.findById(cityId).getVO()));
+	}
 }

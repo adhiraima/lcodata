@@ -15,19 +15,19 @@
               success: function(data) {
                   $.each(data, function(index, value) {
                       $('#state').append($('<option>').text(data[index].name).attr('value', data[index].stateId));
-            });
-            $.ajax({
-                type: 'GET',
-                url: '/api/cities/'+$('#state').val(),
-                dataType: "json",
-                //async:false,
-                success: function(data) {
-                	$('#city').empty();
-                    $.each(data, function(index, value) {
-                        $('#city').append($('<option>').text(data[index].cityName).attr('value', data[index].cityId));
-            });
-                }
-            });
+            		});
+		            $.ajax({
+		                type: 'GET',
+		                url: '/api/cities/'+$('#state').val(),
+		                dataType: "json",
+		                //async:false,
+		                success: function(data) {
+		                	$('#city').empty();
+		                    $.each(data, function(index, value) {
+		                      $('#city').append($('<option>').text(data[index].cityName).attr('value', data[index].cityId));
+		            		});
+              	  		}
+		            });
               }
             });
             
@@ -48,7 +48,7 @@
             });
             
             $('#submitButton').click( function() {
-	            console.log(">>>>"+JSON.parse(JSON.stringify($('#lcoForm').serializeArray())));
+	     		event.preventDefault();
 	            var jsonData = {};
 	            var formData = $("#lcoForm").serializeArray();
 	            $.each(formData, function() {
@@ -61,27 +61,34 @@
 		            	jsonData[this.name] = this.value || '';
 		            }
 	            });
-	            console.log(jsonData);
-	            console.log(JSON.stringify($('#lcoForm').serializeArray()));
+	            console.log(JSON.stringify(jsonData));
 	            $.ajax({
 	               url: '/api/lco/add',
 	               type: 'POST',
-	               contentType: 'application/json',
-	               accepts: 'application/json',
+	               contentType: "application/json",
+	               //accepts: "application/json",
+	               headers: { 
+				        //'Accept': 'application/json',
+				        'Content-Type': 'application/json',
+				        'Cache-Control': 'no-cache' 
+				    },
+				   dataType: "json",
 	               data: JSON.stringify(jsonData),
 	               success: function(data) {
-	               		alert("hurrah");
 	                   console.log("added...");
+	                   //$('#lcoForm").clear();
 	                   $('#messages').append("added successfully!!");
 	               },
-	               error: function(date) {
+	               error: function(data) {
 	               	console.log("error...");
 	               	$('#messages').append("problem adding lco!!");
 	               }
 	            });
 	            return;
-            });
+	        });
          });
+         
+         
         </script>
     </head>
     <body>

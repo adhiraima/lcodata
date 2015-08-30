@@ -8,7 +8,101 @@
     
     <script>
         $( document ).ready(function() {
+        
+        	function getParameterByName(name) {
+			    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			        results = regex.exec(location.search);
+			    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
+			$.ajax({
+              type: 'GET',
+              url: '/api/states',
+              dataType: "json",
+              //async:false,
+              success: function(data) {
+                  $.each(data, function(index, value) {
+                      $('#state').append($('<option>').text(data[index].name).attr('value', data[index].stateId));
+            		});
+              }
+            });
+			
 		    console.log( "ready! edit" );
+		    $.ajax({
+		        type: 'GET',
+		        url: '/api/lco/'+getParameterByName('lcoCode'),
+		        dataType: "json",
+		        //async:false,
+		        success: function(data) {
+		            console.log(">>>>>>"+data);
+		            $('#lcoName').val(data.lcoName);
+		            $('#lcoCode').val(data.lcoCode);
+		            $('#contactName').val(data.contactName);
+		            $('#phone').val(data.phone);
+		            $('#address').val(data.address);
+		            $('#state').val($('#state option[value="'+data.state+'"]').val());
+		            $.ajax({
+		                type: 'GET',
+		                url: '/api/cities/'+$('#state').val(),
+		                dataType: "json",
+		                //async:false,
+		                success: function(citydata) {
+		                	//$('#city').empty();
+		                    $.each(citydata, function(index, value) {
+		                      $('#city').append($('<option>').text(citydata[index].cityName).attr('value', citydata[index].cityId));
+		            		});
+		            		$('#city').val($('#city option[value="'+data.city+'"]').val());
+              	  		}
+		            });
+		            
+		            $('#jvName').val(data.jvName);
+		            $('#jvCode').val(data.jvCode);
+		        },
+		        error: function(data) {
+		        console.log('error...');
+		        	$('#messages').append(data.message);
+		        }
+		    });
+		    
+		    $('#submitButton').click( function() {
+	     		event.preventDefault();
+	            var jsonData = {};
+	            var formData = $("#lcoForm").serializeArray();
+	            $.each(formData, function() {
+		            if (jsonData[this.name]) {
+		            	if (!jsonData[this.name].push) {
+		            		jsonData[this.name] = [jsonData[this.name]];
+		            	}
+		            	jsonData[this.name].push(this.value || '');
+		            } else {
+		            	jsonData[this.name] = this.value || '';
+		            }
+	            });
+	            console.log(JSON.stringify(jsonData));
+	            $.ajax({
+	               url: '/api/lco/update',
+	               type: 'POST',
+	               contentType: "application/json",
+	               //accepts: "application/json",
+	               headers: { 
+				        //'Accept': 'application/json',
+				        'Content-Type': 'application/json',
+				        'Cache-Control': 'no-cache' 
+				    },
+				   dataType: "json",
+	               data: JSON.stringify(jsonData),
+	               success: function(data) {
+	                   console.log("added...");
+	                   //$('#lcoForm").clear();
+	                   $('#messages').append("updated successfully!!");
+	               },
+	               error: function(data) {
+	               	console.log("error...");
+	               	$('#messages').append(data.message);
+	               }
+	            });
+	            return;
+	        });
 		});
     </script>
     
@@ -17,7 +111,53 @@
 <body>
     
         <a class="offline-button" href="../index.html">Back</a>
-        
+        <span id="messages"></span>
+        <form id="lcoForm" action="/api/lco/update" method="POST">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>LCO Name: &nbsp;</td>
+                        <td> <input type="text" id="lcoName" name="lcoName"> </td>
+                    </tr>
+                    <tr>
+                        <td>LCO Code: &nbsp; </td>
+                        <td> <input type="text" id="lcoCode" name="lcoCode" readonly> </td>
+                    </tr>
+                    <tr>
+                        <td>Contact Name: &nbsp; </td>
+                        <td> <input type="text" id="contactName" name="contactName"> </td>
+                    </tr>
+                    <tr>
+                        <td>Phone: &nbsp; </td>
+                        <td> <input type="text" id="phone" name="phone"> </td>
+                    </tr>
+                    <tr>
+                        <td>Address: &nbsp; </td>
+                        <td> <input type="text" id="address" name="address"> </td>
+                    </tr>
+                    <tr>
+                        <td>State: &nbsp; </td>
+                        <td> <select id="state" name="state"></select> </td>
+                    </tr>
+                    <tr>
+                        <td>City: &nbsp; </td>
+                        <td> <select id="city" name="city"></select> </td>
+                    </tr>
+                    <tr>
+                        <td>JV/Distributer Name: &nbsp; </td>
+                        <td> <select id="jvName" name="jvName"></select> </td>
+                    </tr>
+                    <tr>
+                        <td>JV/Distributer Code: &nbsp; </td>
+                        <td> <select id="jvCode" name="jvCode"></select> </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" name="submit" value="Edit LCO" id="submitButton"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
         
 </body>
 </html> 

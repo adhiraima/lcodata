@@ -8,7 +8,9 @@ POST	/api/lco/add				controllers.LcoController.addLcoData()
 GET		/api/lco/:lcoCode			controllers.LcoController.getLco(lcoCode : String)
 POST	/api/lco/update				controllers.LcoController.editLcoData()
 GET		/api/states				controllers.LcoController.getStates()
+GET		/api/state/:stateId		controllers.LcoController.getState(stateId : Long)
 GET		/api/cities/:stateId	controllers.LcoController.getCities(stateId : Long)
+GET		/api/city/:cityId		controllers.LcoController.getCity(cityId : Long)
 
 
 GET     /api/list					controllers.LandingController.showMasterData()
