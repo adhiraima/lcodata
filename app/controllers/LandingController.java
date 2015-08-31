@@ -11,6 +11,8 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import vo.LcoDataVO;
+import entity.Employee;
+import entity.Lco;
 import entity.LcoData;
 
 /**
@@ -28,5 +30,20 @@ public class LandingController extends Controller {
 			vos.add(lco.getVO());
 		}
 		return ok(Json.toJson(vos));
+	}
+	
+	public static Result showSelectedData(String employeeId) {
+		Logger.info(">>>>>>>>here in get master list");
+		List<Lco> lcos = Lco.findAllByEmployee(employeeId);
+		List<LcoData> lcodata = LcoData.findByLcoCodes(lcos);
+		List<LcoDataVO> vos = new ArrayList<LcoDataVO>();
+		for (LcoData lco : lcodata) {
+			vos.add(lco.getVO());
+		}
+		return ok(Json.toJson(vos));
+	}
+	
+	public static Result getEmployee(String employeeId) {
+		return ok(Json.toJson(Employee.findEmployeeeById(employeeId).getVO()));
 	}
 }

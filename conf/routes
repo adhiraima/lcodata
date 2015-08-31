@@ -14,6 +14,8 @@ GET		/api/city/:cityId		controllers.LcoController.getCity(cityId : Long)
 
 
 GET     /api/list					controllers.LandingController.showMasterData()
+GET		/api/list/:employeeId		controllers.LandingController.showSelectedData(employeeId : String)
+GET		/api/employee/:employeeId	controllers.LandingController.getEmployee(employeeId : String)
 
 # Home page
 

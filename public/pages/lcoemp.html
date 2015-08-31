@@ -5,140 +5,125 @@
         <meta charset="utf-8">
         <script src="../javascripts/jquery-2.1.1.min.js"></script>
         <script>
-            $( document ).ready(function() {
-            console.log( "ready! empdata" );
-            $.ajax({
-              type: 'GET',
-              url: '/api/states',
-              dataType: "json",
-              //async:false,
-              success: function(data) {
-                  $.each(data, function(index, value) {
-                      $('#state').append($('<option>').text(data[index].name).attr('value', data[index].stateId));
-            		});
-		            $.ajax({
-		                type: 'GET',
-		                url: '/api/cities/'+$('#state').val(),
-		                dataType: "json",
-		                //async:false,
-		                success: function(data) {
-		                	$('#city').empty();
-		                    $.each(data, function(index, value) {
-		                      $('#city').append($('<option>').text(data[index].cityName).attr('value', data[index].cityId));
-		            		});
-              	  		}
-		            });
-              }
-            });
-            
-            $('#state').change(function() {
-            console.log( "Handler for .select() called." );
-            $.ajax({
-              type: 'GET',
-              url: '/api/cities/'+$('#state').val(),
-              dataType: "json",
-              //async:false,
-              success: function(data) {
-              	$('#city').empty();
-                  $.each(data, function(index, value) {
-                      $('#city').append($('<option>').text(data[index].cityName).attr('value', data[index].cityId));
-            		});
-              	  }
-            	});
-            });
-            
-            $('#submitButton').click( function() {
-	     		event.preventDefault();
-	            var jsonData = {};
-	            var formData = $("#lcoForm").serializeArray();
-	            $.each(formData, function() {
-		            if (jsonData[this.name]) {
-		            	if (!jsonData[this.name].push) {
-		            		jsonData[this.name] = [jsonData[this.name]];
-		            	}
-		            	jsonData[this.name].push(this.value || '');
-		            } else {
-		            	jsonData[this.name] = this.value || '';
+        $(document).ready(function() {
+        	function getParameterByName(name) {
+			    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+			    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			        results = regex.exec(location.search);
+			    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+			}
+			$.ajax({
+		        type: 'GET',
+		        url: '/api/employee/'+getParameterByName('employeeId'),
+		        dataType: "json",
+		        //async:false,
+		        success: function(data) {
+		        	$('#employeeId').val(data.employeeId);
+		        	$('#employeeName').val(data.name);
+		        	$('#employeeEmail').val(data.email);
+		        	$("#addHref").attr("href", "add.html?employeeId="+$('#employeeId').val());
+		        }
+		    });
+		    $.ajax({
+		        type: 'GET',
+		        url: '/api/list/'+getParameterByName('employeeId'),
+		        dataType: "json",
+		        //async:false,
+		        success: function(data) {
+		            console.log(">>>>>>"+data);
+		            var searchResults = $('#searchResults tbody');
+		            $(searchResults).empty();
+		            for (var i = 0; i < data.length; i++) {
+		               var html = "<tr>"
+						  	+"<td>" 
+						  	+ data[i].serialNumber 
+						  	+ "</td><td>" 
+						  	+ data[i].lcoName 
+						  	+ "</td>"
+						  	+"<td><a href=\"edit.html?lcoCode="+data[i].lcoCode+"\" >" 
+						  	+ data[i].lcoCode 
+						  	+ "</a></td><td>" 
+						  	+ data[i].address 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ data[i].jvCode 
+						  	+ "</td><td>" 
+						  	+ data[i].jvName 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ data[i].city 
+						  	+ "</td><td>" 
+						  	+ data[i].state 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ data[i].aopLocation 
+						  	+ "</td><td>" 
+						  	+ data[i].pincode 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ data[i].phone 
+						  	+ "</td><td>" 
+						  	+ data[i].parentCode 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ data[i].area 
+						  	+ "</td><td>" 
+						  	+ data[i].dealerTypeId 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ data[i].oldAopLocation 
+						  	+ "</td><td>" 
+						  	+ data[i].employeeId 
+						  	+ "</td>"
+						  	+"<td>" 
+						  	+ data[i].agreementId 
+						  	+ "</td><td>" 
+						  	+ data[i].kycId 
+						  	+ "</td>"	
+						  	+"</tr>";
+						
+						$(searchResults).append(html);
+						
 		            }
-	            });
-	            console.log(JSON.stringify(jsonData));
-	            $.ajax({
-	               url: '/api/lco/add',
-	               type: 'POST',
-	               contentType: "application/json",
-	               //accepts: "application/json",
-	               headers: { 
-				        //'Accept': 'application/json',
-				        'Content-Type': 'application/json',
-				        'Cache-Control': 'no-cache' 
-				    },
-				   dataType: "json",
-	               data: JSON.stringify(jsonData),
-	               success: function(data) {
-	                   console.log("added...");
-	                   //$('#lcoForm").clear();
-	                   $('#messages').append("added successfully!!");
-	               },
-	               error: function(data) {
-	               	console.log("error...");
-	               	$('#messages').append("problem adding lco!!");
-	               }
-	            });
-	            return;
-	        });
-         });
+		        }
+		
+		    });
+		});
+    </script>
          
-         
-        </script>
     </head>
     <body>
         <a class="offline-button" href="../index.html">Back</a>
-        <span id="messages"></span>
-        <form id="lcoForm" action="/api/lco/add" method="POST">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>LCO Name: &nbsp;</td>
-                        <td> <input type="text" id="lcoName" name="lcoName"> </td>
-                    </tr>
-                    <tr>
-                        <td>LCO Code: &nbsp; </td>
-                        <td> <input type="text" id="lcoCode" name="lcoCode"> </td>
-                    </tr>
-                    <tr>
-                        <td>Contact Name: &nbsp; </td>
-                        <td> <input type="text" id="contactName" name="contactName"> </td>
-                    </tr>
-                    <tr>
-                        <td>Phone: &nbsp; </td>
-                        <td> <input type="text" id="phone" name="phone"> </td>
-                    </tr>
-                    <tr>
-                        <td>Address: &nbsp; </td>
-                        <td> <input type="text" id="address" name="address"> </td>
-                    </tr>
-                    <tr>
-                        <td>State: &nbsp; </td>
-                        <td> <select id="state" name="state"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>City: &nbsp; </td>
-                        <td> <select id="city" name="city"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>JV/Distributer Name: &nbsp; </td>
-                        <td> <select id="jvName" name="jvName"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>JV/Distributer Code: &nbsp; </td>
-                        <td> <select id="jvCode" name="jvCode"></select> </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="submit" name="submit" value="Add LCO" id="submitButton"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
+        <a class="offline-button" id="addHref" href="">Add LCO</a></br></br>
+        Employee Id: <input type="text" name="employeeId" id="employeeId" readonly></br>
+        Employee Name: <input type="text" name="employeeName" id="employeeName" readonly></br>
+        Employee Email: <input type="text" name="employeeEmail" id="employeeEmail" readonly>
+        </br></br>
+        <table id="searchResults" border="1px">
+        	<thead>
+	        	<tr>
+	        		<td>serialNumber</td>
+	        		<td>lcoName</td>
+	        		<td>lcoCode</td>
+	        		<td>address</td>
+	        		<td>jvCode</td>
+	        		<td>jvName</td>
+	        		<td>city</td>
+	        		<td>state</td>
+	        		<td>aopLocation</td>
+	        		<td>pincode</td>
+	        		<td>phone</td>
+	        		<td>parentCode</td>
+	        		<td>area</td>
+	        		<td>dealerTypeId</td>
+	        		<td>oldAopLocation</td>
+	        		<td>employeeId</td>
+	        		<td>agreementId</td>
+	        		<td>kycId</td>
+	        	</tr>
+        	</thead>
+        	<tbody>
+        	</tbody>
+        </table>
     </body>
 </html>

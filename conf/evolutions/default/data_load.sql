@@ -73,3 +73,8 @@ INSERT INTO `lcodatabase`.`city` (`state_id`, `city_name`) VALUES ('4', 'Behror'
 INSERT INTO `lcodatabase`.`city` (`state_id`, `city_name`) VALUES ('4', 'Kota');
 INSERT INTO `lcodatabase`.`city` (`state_id`, `city_name`) VALUES ('4', 'Tonk');
 INSERT INTO `lcodatabase`.`city` (`state_id`, `city_name`) VALUES ('4', 'Rajasthan - Expansion');
+
+
+INSERT INTO `lcodatabase`.`employee` (`employee_id`, `name`, `email`) VALUES ('100011', 'Adhir', 'adhir@suventure.com');
+INSERT INTO `lcodatabase`.`employee` (`employee_id`, `name`) VALUES ('100012', 'Dipankar', 'dipankar@suventure.in');
+

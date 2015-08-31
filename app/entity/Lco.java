@@ -68,6 +68,10 @@ public class Lco extends Model {
 		return find.byId(lcoCode);
 	}
 	
+	public static List<Lco> findAllByEmployee(String employeeId) {
+		return find.where().eq("employeeId", employeeId).findList();
+	}
+	
 	
 	public String getPhone() {
 		return phone;

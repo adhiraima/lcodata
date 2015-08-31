@@ -3,6 +3,7 @@
  */
 package entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -67,6 +68,14 @@ public class LcoData extends Model {
 	
 	public static LcoData findById(Long serialNum) {
 		return find.byId(serialNum);
+	}
+	
+	public static List<LcoData> findByLcoCodes(List<Lco> lcos) {
+		List<String> lcocodes = new ArrayList<String>();
+		for (Lco lco : lcos) {
+			lcocodes.add(lco.getLcoCode());
+		}
+		return find.where().in("lcoCode", lcocodes).findList();
 	}
 
 	public Long getSerialNumber() {
@@ -162,6 +171,7 @@ public class LcoData extends Model {
 			vo.phone = lco.getPhone();
 			vo.state = State.findById(lco.getState()).getName();
 			vo.city = City.findById(lco.getCity()).getCityName();
+			vo.employeeId = lco.getEmployeeId();
 		}
 		vo.oldAopLocation = this.oldAopLocation;
 		vo.pincode = this.pincode;
@@ -173,6 +183,7 @@ public class LcoData extends Model {
 			vo.jvCode = StringUtils.EMPTY;
 			vo.jvName = StringUtils.EMPTY;
 		}
+		
 		vo.dealerTypeId = this.getDealerTypeId();
 		vo.kycId = this.kycId;
 		vo.agreementId = this.agreementId;

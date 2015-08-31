@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import vo.EmployeeVO;
+
 import com.avaje.ebean.Model;
 
 /**
@@ -62,5 +64,14 @@ public class Employee extends Model {
 	
 	public static Employee findEmployeeByEmail(String email) {
 		return find.where().eq("email", email).findUnique();
+	}
+	
+	public EmployeeVO getVO() {
+		EmployeeVO vo = new EmployeeVO();
+		vo.email = this.email;
+		vo.employeeId = this.employeeId;
+		vo.name = this.name;
+		
+		return vo;
 	}
 }
