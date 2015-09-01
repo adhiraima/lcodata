@@ -7,15 +7,22 @@
 POST	/api/lco/add				controllers.LcoController.addLcoData()
 GET		/api/lco/:lcoCode			controllers.LcoController.getLco(lcoCode : String)
 POST	/api/lco/update				controllers.LcoController.editLcoData()
+DELETE	/api/lco/:lcoCode			controllers.LcoController.delete(lcoCode : String)
 GET		/api/states				controllers.LcoController.getStates()
 GET		/api/state/:stateId		controllers.LcoController.getState(stateId : Long)
 GET		/api/cities/:stateId	controllers.LcoController.getCities(stateId : Long)
 GET		/api/city/:cityId		controllers.LcoController.getCity(cityId : Long)
-
+GET		/api/jvs				controllers.LcoController.getJVs()
 
 GET     /api/list					controllers.LandingController.showMasterData()
 GET		/api/list/:employeeId		controllers.LandingController.showSelectedData(employeeId : String)
 GET		/api/employee/:employeeId	controllers.LandingController.getEmployee(employeeId : String)
+GET		/api/employees				controllers.LandingController.getEmployees()
+
+POST	/api/employee				controllers.EmployeeController.add()
+
+POST	/api/agreement/:lcoCode		controllers.LcoController.uploadAgreement(lcoCode : String)
+POST	/api/kyc/:lcoCode			controllers.LcoController.uploadKYC(lcoCode : String)
 
 # Home page
 

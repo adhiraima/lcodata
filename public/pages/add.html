@@ -1,10 +1,25 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <title>Loading content with AJAX</title>
         <meta charset="utf-8">
+       
+        <link href="../stylesheets/DenStyle.css" rel="stylesheet" type="text/css" />
+        <link href="../stylesheets/ThemeForms/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- MetisMenu CSS -->
+        <link href="../stylesheets/ThemeForms/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="../stylesheets/ThemeForms/dist/css/sb-admin-2.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="../stylesheets/ThemeForms/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+
         <script src="../javascripts/jquery-2.1.1.min.js"></script>
         <script>
+		function goBack() {
+				window.history.back();
+			}
             $( document ).ready(function() {
             
             function getParameterByName(name) {
@@ -14,6 +29,30 @@
 			    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 			}
 			$('#employeeId').val(getParameterByName('employeeId'));
+			$.ajax({
+              type: 'GET',
+              url: '/api/employee/'+$('#employeeId').val(),
+              dataType: "json",
+              //async:false,
+              success: function(data) {
+				$('#employeeName').val(data.name);
+				$('#employeeEmail').val(data.email);
+			  }
+			});
+			
+			$.ajax({
+              type: 'GET',
+              url: '/api/jvs',
+              dataType: "json",
+              //async:false,
+              success: function(data) {
+				$('#jvCode').empty();
+                $.each(data, function(index, value) {
+                    $('#jvCode').append($('<option>').text(data[index].jvCode).attr('value', data[index].jvCode).attr('jvName', data[index].jvName));
+            	});
+              }
+			});
+			
             console.log( "ready! add" );
             $.ajax({
               type: 'GET',
@@ -41,6 +80,7 @@
             
             $('#state').change(function() {
             console.log( "Handler for .select() called." );
+			$('#city').clear();
             $.ajax({
               type: 'GET',
               url: '/api/cities/'+$('#state').val(),
@@ -55,6 +95,10 @@
             	});
             });
             
+			$('#jvCode').click( function() {
+				$('#jvName').val($('#jvCode option:selected').attr('jvName'));
+			});
+			
             $('#submitButton').click( function() {
 	     		event.preventDefault();
 	            var jsonData = {};
@@ -99,55 +143,95 @@
          
         </script>
     </head>
-    <body>
-        <a class="offline-button" href="../index.html">Back</a>
-        <span id="messages"></span>
-        <form id="lcoForm" action="/api/lco/add" method="POST">
-        	<input type="hidden" name="employeeId" id="employeeId" >
-            <table>
-                <tbody>
-                    <tr>
-                        <td>LCO Name: &nbsp;</td>
-                        <td> <input type="text" id="lcoName" name="lcoName"> </td>
-                    </tr>
-                    <tr>
-                        <td>LCO Code: &nbsp; </td>
-                        <td> <input type="text" id="lcoCode" name="lcoCode"> </td>
-                    </tr>
-                    <tr>
-                        <td>Contact Name: &nbsp; </td>
-                        <td> <input type="text" id="contactName" name="contactName"> </td>
-                    </tr>
-                    <tr>
-                        <td>Phone: &nbsp; </td>
-                        <td> <input type="text" id="phone" name="phone"> </td>
-                    </tr>
-                    <tr>
-                        <td>Address: &nbsp; </td>
-                        <td> <input type="text" id="address" name="address"> </td>
-                    </tr>
-                    <tr>
-                        <td>State: &nbsp; </td>
-                        <td> <select id="state" name="state"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>City: &nbsp; </td>
-                        <td> <select id="city" name="city"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>JV/Distributer Name: &nbsp; </td>
-                        <td> <select id="jvName" name="jvName"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>JV/Distributer Code: &nbsp; </td>
-                        <td> <select id="jvCode" name="jvCode"></select> </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="submit" name="submit" value="Add LCO" id="submitButton"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-    </body>
+<body class="formbackground">
+    <header class="main-header">
+        <div>
+            <div class="float-left">
+                <a href="index2.html" class="logo">
+                    <img src="../stylesheets/DENImages/den_corp_logo.png" height="40px" />
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <a class="offline-button" onclick="goBack()">Back</a>
+    <span id="messages"></span>
+    <form id="lcoForm" action="/api/lco/add" method="POST">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Add LCO Details
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                
+                                    <table cellspacing="50">
+                                        <tbody>
+											<tr>
+                                                <td>Employee ID: &nbsp;</td>
+                                                <td> <input type="text" name="employeeId" id="employeeId" readonly> </td>
+                                            </tr>
+											<tr>
+                                                <td>Employee Name: &nbsp;</td>
+                                                <td><input type="text" name="employeeName" id="employeeName" readonly> </td>
+                                            </tr> 
+											<tr>
+                                                <td>Employee Email: &nbsp;</td>
+                                                <td> <input type="text" name="employeeEmail" id="employeeEmail" readonly> </td>
+                                            </tr> 
+                                            <tr>
+                                                <td>LCO Name: &nbsp;</td>
+                                                <td> <input type="text" id="lcoName" name="lcoName"> </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>LCO Code: &nbsp; </td>
+                                                <td> <input type="text" id="lcoCode" name="lcoCode"> </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Contact Name: &nbsp; </td>
+                                                <td> <input type="text" id="contactName" name="contactName"> </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Phone: &nbsp; </td>
+                                                <td> <input type="text" id="phone" name="phone"> </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Address: &nbsp; </td>
+                                                <td> <input type="text" id="address" name="address"> </td>
+                                            </tr>
+                                            <tr>
+                                                <td>State: &nbsp; </td>
+                                                <td> <select id="state" name="state"></select> </td>
+                                            </tr>
+                                            <tr>
+                                                <td>City: &nbsp; </td>
+                                                <td> <select id="city" name="city"></select> </td>
+                                            </tr>
+                                           <tr>
+                                            <td>JV/Distributer Name: &nbsp; </td>
+                                            <td><br/> <input type="text" id="jvName" name="jvName" readonly> </td>
+                                        </tr>
+                                            <tr>
+                                            <td>JV/Distributer Code: &nbsp; </td>
+                                            <td> <br/><select id="jvCode" name="jvCode"></select> </td>
+                                        </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td><input type="submit" name="submit" value="Add LCO" id="submitButton" class="btn btn-primary"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </form>
+</body>
 </html>

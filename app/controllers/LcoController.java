@@ -5,6 +5,7 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import play.Logger;
 import play.libs.Json;
@@ -18,6 +19,7 @@ import com.avaje.ebean.Ebean;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import entity.City;
+import entity.JV;
 import entity.Lco;
 import entity.LcoData;
 import entity.State;
@@ -72,12 +74,26 @@ public class LcoController extends Controller {
 		return ok(Json.toJson(jsonRes));
 	}
 	
-	public static Result uploadAggrement() {
-		return ok();
+	public static Result uploadAgreement(String lcoCode) {
+		ObjectNode jsonRes = Json.newObject();
+		Map<String, String> fileName = new JSONDeserializer<Map<String, String>>().deserialize(
+                request().body().asJson().toString(), Map.class);
+		LcoData lco = LcoData.findByLcoCode(lcoCode);
+		lco.setAgreementId(fileName.get("file").replace("fakepath", "agreement"));
+		Ebean.update(lco);
+		jsonRes.put("successMessage", "file Uploaded!!");
+		return ok(Json.toJson(jsonRes));
 	}
 	
-	public static Result uploadKYC() {
-		return ok();
+	public static Result uploadKYC(String lcoCode) {
+		ObjectNode jsonRes = Json.newObject();
+		Map<String, String> fileName = new JSONDeserializer<Map<String, String>>().deserialize(
+                request().body().asJson().toString(), Map.class);
+		LcoData lco = LcoData.findByLcoCode(lcoCode);
+		lco.setKycId(fileName.get("file").replace("fakepath", "kyc"));
+		Ebean.update(lco);
+		jsonRes.put("successMessage", "file Uploaded!!");
+		return ok(Json.toJson(jsonRes));
 	}
 	
 	public static Result getStates() {
@@ -93,6 +109,15 @@ public class LcoController extends Controller {
 		return ok(Json.toJson(State.findById(stateId).getVO()));
 	}
 	
+	public static Result delete(String lcoCode) {
+		Logger.info(">>>>>>delete");
+		Lco lco = Lco.findById(lcoCode);
+		LcoData lcoData = LcoData.findByLcoCode(lcoCode);
+		Ebean.delete(lco);
+		Ebean.delete(lcoData);
+		return ok();
+	}
+	
 	public static Result getCities(Long stateId) {
 		List<City> cities = City.findByState(stateId);
 		List<CityVO> vos = new ArrayList<CityVO>();
@@ -104,5 +129,9 @@ public class LcoController extends Controller {
 
 	public static Result getCity(Long cityId) {
 		return ok(Json.toJson(City.findById(cityId).getVO()));
+	}
+	
+	public static Result getJVs() {
+		return ok(Json.toJson(JV.findAll()));
 	}
 }

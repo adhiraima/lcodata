@@ -1,0 +1,40 @@
+.formbackground{
+    background-color:#251939 !important; 
+     margin-top:0px;
+     padding-left: 30px;
+    padding-right: 30px;
+}
+
+
+.main-header{
+     background-color: #000000;
+    z-index: 2;
+    position: relative;
+    box-shadow: 0 10px 10px rgba(150, 149, 149, 0.5);
+    color: #fff;
+    height: 65px;
+	
+}
+
+.font-change a{
+ color:blue !important;
+}
+
+.font-change{
+background-color:white;
+width:100%;
+text-align:center;
+}
+
+a{
+color:white !important;
+}
+
+#messages{
+color:white;
+}
+
+.tablechange{
+padding:20px;
+cell-padding:20;
+}

@@ -1,14 +1,23 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Loading content with AJAX</title>
     <meta charset="utf-8">
     <script src="../javascripts/jquery-2.1.1.min.js"></script>
-    
-    
+    <link href="../stylesheets/DenStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../stylesheets/ThemeForms/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- MetisMenu CSS -->
+        <link href="../stylesheets/ThemeForms/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="../stylesheets/ThemeForms/dist/css/sb-admin-2.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="../stylesheets/ThemeForms/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <script  type="text/javascript">
+	function goBack() {
+				window.history.back();
+			}
         $(document).ready(function() {
-		    $.ajax({
+				$.ajax({
 		        type: 'GET',
 		        url: '/api/list',
 		        dataType: "json",
@@ -24,7 +33,7 @@
 						  	+ "</td><td>" 
 						  	+ data[i].lcoName 
 						  	+ "</td>"
-						  	+"<td><a href=\"edit.html?lcoCode="+data[i].lcoCode+"\" >" 
+						  	+"<td><a href=\"edit.html?lcoCode="+data[i].lcoCode+"\" title=\"Edit LCO Details\"  >" 
 						  	+ data[i].lcoCode 
 						  	+ "</a></td><td>" 
 						  	+ data[i].address 
@@ -56,14 +65,14 @@
 						  	+ "</td>"
 						  	+"<td>" 
 						  	+ data[i].oldAopLocation 
-						  	+ "</td><td><a href=\"lcoemp.html?employeeId="+data[i].employeeId+"\" >"
+						  	+ "</td><td><a href=\"lcoemp.html?employeeId="+data[i].employeeId+"\" title=\"Edit Employee Details\" >"
 						  	+ data[i].employeeId 
 						  	+ "</a></td>"
-						  	+"<td>" 
+						  	+"<td><a href=\"" 
 						  	+ data[i].agreementId 
-						  	+ "</td><td>" 
+						  	+ "\">open agreement</a></td><td><a href=\"" 
 						  	+ data[i].kycId 
-						  	+ "</td>"	
+						  	+ "\">open Kyc</a></td>"	
 						  	+"</tr>";
 						
 						$(searchResults).append(html);
@@ -77,41 +86,51 @@
     
     
 </head>
-<body>
-    	<table id="nav">
-	    	<tr>
-		    	<td><a href="../index.html">Back</a></td>
-	    	</tr>
-    	</table>
-    		
-    	</br></br>
+<body class="formbackground">
+    <header class="main-header">
+        <div>
+            <div class="float-left">
+                <a href="index2.html" class="logo">
+                    <img src="../stylesheets/DENImages/den_corp_logo.png" height="40px" />
+                </a>
+            </div>
+        </div>
+    </header>
+    <table id="nav">
+        <tr>
+            <td><a onclick="goBack()">Back  &nbsp;&nbsp; </a></td> 
+			<td><a href="addDirect.html">&nbsp;&nbsp; Add LCO</a></td>
+        </tr>
+    </table>
+
+    </br></br>
+ <div class="row">
         
-        
-        <table id="searchResults" border="1px">
-        	<thead>
-	        	<tr>
-	        		<td>serialNumber</td>
-	        		<td>lcoName</td>
-	        		<td>lcoCode</td>
-	        		<td>address</td>
-	        		<td>jvCode</td>
-	        		<td>jvName</td>
-	        		<td>city</td>
-	        		<td>state</td>
-	        		<td>aopLocation</td>
-	        		<td>pincode</td>
-	        		<td>phone</td>
-	        		<td>parentCode</td>
-	        		<td>area</td>
-	        		<td>dealerTypeId</td>
-	        		<td>oldAopLocation</td>
-	        		<td>employeeId</td>
-	        		<td>agreementId</td>
-	        		<td>kycId</td>
-	        	</tr>
-        	</thead>
-        	<tbody>
-        	</tbody>
-        </table>
+
+    <table id="searchResults" border="1px" class="font-change" cellspacing="10">
+        <thead>
+            <tr>
+                <td> serialNumber </td>
+                <td> lcoName </td>
+                <td>lcoCode</td>
+                <td>address</td>
+                <td>jvCode</td>
+                <td>jvName</td>
+                <td>city</td>
+                <td>state</td>
+                <td>aopLocation</td>
+                <td>pincode</td>
+                <td>phone</td>
+                <td>parentCode</td>
+                <td>area</td>
+                <td>dealerTypeId</td>
+                <td>oldAopLocation</td>
+                <td>employeeId</td>
+                <td>agreementId</td>
+                <td>kycId</td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </body>
 </html>        

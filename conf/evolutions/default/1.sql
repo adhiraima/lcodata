@@ -48,8 +48,8 @@ create table LCOMaster (
   area                      varchar(255),
   dealer_type               bigint,
   old_aop                   varchar(255),
-  agreement                 bigint,
-  kycId                     bigint,
+  agreement                 varchar(255),
+  kycId                     varchar(255),
   constraint pk_LCOMaster primary key (serial_num))
 ;
 

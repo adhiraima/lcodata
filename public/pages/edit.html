@@ -1,20 +1,44 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>Loading content with AJAX</title>
     <meta charset="utf-8">
     <script src="../javascripts/jquery-2.1.1.min.js"></script>
     
+    <link href="../stylesheets/DenStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../stylesheets/ThemeForms/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="../stylesheets/ThemeForms/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../stylesheets/ThemeForms/dist/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../stylesheets/ThemeForms/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
     
     <script>
+			function goBack() {
+				window.history.back();
+			}
         $( document ).ready(function() {
-        
+			
         	function getParameterByName(name) {
 			    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 			    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 			        results = regex.exec(location.search);
 			    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 			}
+			$.ajax({
+              type: 'GET',
+              url: '/api/jvs',
+              dataType: "json",
+              //async:false,
+              success: function(data) {
+				$('#jvCode').empty();
+                $.each(data, function(index, value) {
+                    $('#jvCode').append($('<option>').text(data[index].jvCode).attr('value', data[index].jvCode).attr('jvName', data[index].jvName));
+            	});
+              }
+			});
 			$.ajax({
               type: 'GET',
               url: '/api/states',
@@ -27,6 +51,84 @@
               }
             });
 			
+			$('#jvCode').click( function() {
+				$('#jvName').val($('#jvCode option:selected').attr('jvName'));
+			});
+			
+			$('#uploadKyc').click( function() {
+				console.log(">>>>>>>"+$('#kyc').val());
+				var jsonObject = {};
+				jsonObject['file'] = $('#kyc').val();
+				console.log("file>>>>>>>>>>"+jsonObject);
+				$.ajax({
+	               url: '/api/kyc/'+$('#lcoCode').val(),
+	               type: 'POST',
+	               contentType: "application/json",
+	               //accepts: "application/json",
+	               headers: { 
+				        //'Accept': 'application/json',
+				        'Content-Type': 'application/json',
+				        'Cache-Control': 'no-cache' 
+				    },
+				   dataType: "json",
+	               data: JSON.stringify(jsonObject),
+	               success: function(data) {
+	                   console.log("uploaded...");
+	                   $('#messages').append("uploaded kyc successfully!!");
+	               },
+	               error: function(data) {
+	               	console.log("error...");
+	               	$('#messages').append(data.message);
+	               }
+	            });
+	            return;
+				
+			});
+			
+			$('#uploadAgreement').click( function() {
+				console.log(">>>>>>>"+$('#agreement').val());
+				var jsonObject = {};
+				jsonObject['file'] = $('#kyc').val();
+				console.log("file>>>>>>>>>>"+jsonObject);
+				$.ajax({
+	               url: '/api/agreement/'+$('#lcoCode').val(),
+	               type: 'POST',
+	               contentType: "application/json",
+	               //accepts: "application/json",
+	               headers: { 
+				        //'Accept': 'application/json',
+				        'Content-Type': 'application/json',
+				        'Cache-Control': 'no-cache' 
+				    },
+				   dataType: "json",
+	               data: JSON.stringify(jsonObject),
+	               success: function(data) {
+	                   console.log("uploaded...");
+	                   $('#messages').append("uploaded agreement successfully!!");
+	               },
+	               error: function(data) {
+	               	console.log("error...");
+	               	$('#messages').append(data.message);
+	               }
+	            });
+			});
+			
+			$('#state').click( function() {
+				$('#city').clear();
+				 $.ajax({
+					type: 'GET',
+					url: '/api/cities/'+$('#state').val(),
+					dataType: "json",
+					//async:false,
+					success: function(citydata) {
+						$('#city').empty();
+						$.each(citydata, function(index, value) {
+						  $('#city').append($('<option>').text(citydata[index].cityName).attr('value', citydata[index].cityId));
+						});
+						$('#city').val($('#city option[value="'+data.city+'"]').val());
+					}
+				});
+			});
 		    console.log( "ready! edit" );
 		    $.ajax({
 		        type: 'GET',
@@ -43,20 +145,19 @@
 		            $('#state').val($('#state option[value="'+data.state+'"]').val());
 		            $.ajax({
 		                type: 'GET',
-		                url: '/api/cities/'+$('#state').val(),
+		                url: '/api/cities/'+data.state,
 		                dataType: "json",
 		                //async:false,
 		                success: function(citydata) {
-		                	//$('#city').empty();
+		                	$('#city').empty();
 		                    $.each(citydata, function(index, value) {
 		                      $('#city').append($('<option>').text(citydata[index].cityName).attr('value', citydata[index].cityId));
 		            		});
 		            		$('#city').val($('#city option[value="'+data.city+'"]').val());
               	  		}
 		            });
-		            
-		            $('#jvName').val(data.jvName);
 		            $('#jvCode').val(data.jvCode);
+		            $('#jvName').val($('#jvCode option:selected').attr('jvName'));
 		        },
 		        error: function(data) {
 		        console.log('error...');
@@ -108,56 +209,105 @@
     
     
 </head>
-<body>
+<body class="formbackground">
+    <header class="main-header">
+        <div>
+            <div class="float-left">
+                <a href="index2.html" class="logo">
+                    <img src="../stylesheets/DENImages/den_corp_logo.png" height="40px" />
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <a class="offline-button" onclick="goBack()">Back</a>
+    <span id="messages"></span>
+    <form id="lcoForm" action="/api/lco/update" method="POST">
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Edit LCO Details
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+
+
+                                <table class="tablechange">
+                                    <tbody>
+                                        <tr>
+                                            <td>LCO Name: &nbsp;</td>
+                                            <td> <br/><input type="text" id="lcoName" name="lcoName"> </td>
+                                        </tr>
+										
+                                        <tr>
+                                            <td>LCO Code: &nbsp; </td>
+                                            <td><br/> <input type="text" id="lcoCode" name="lcoCode" readonly> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Contact Name: &nbsp; </td>
+                                            <td> <br/><input type="text" id="contactName" name="contactName"> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Phone: &nbsp; </td>
+                                            <td> <br/><input type="text" id="phone" name="phone"> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Address: &nbsp; </td>
+                                            <td> <br/><input type="text" id="address" name="address"> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>State: &nbsp; </td>
+                                            <td><br/> <select id="state" name="state"></select> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>City: &nbsp; </td>
+                                            <td> <br/><select id="city" name="city"></select> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>JV/Distributer Name: &nbsp; </td>
+                                            <td><br/> <input type="text" id="jvName" name="jvName" readonly> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>JV/Distributer Code: &nbsp; </td>
+                                            <td> <br/><select id="jvCode" name="jvCode"></select> </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><br/><input type="submit" name="submit" value="Edit LCO" id="submitButton" class="btn btn-primary"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </form>
     
-        <a class="offline-button" href="../index.html">Back</a>
-        <span id="messages"></span>
-        <form id="lcoForm" action="/api/lco/update" method="POST">
-            <table>
-                <tbody>
-                    <tr>
-                        <td>LCO Name: &nbsp;</td>
-                        <td> <input type="text" id="lcoName" name="lcoName"> </td>
-                    </tr>
-                    <tr>
-                        <td>LCO Code: &nbsp; </td>
-                        <td> <input type="text" id="lcoCode" name="lcoCode" readonly> </td>
-                    </tr>
-                    <tr>
-                        <td>Contact Name: &nbsp; </td>
-                        <td> <input type="text" id="contactName" name="contactName"> </td>
-                    </tr>
-                    <tr>
-                        <td>Phone: &nbsp; </td>
-                        <td> <input type="text" id="phone" name="phone"> </td>
-                    </tr>
-                    <tr>
-                        <td>Address: &nbsp; </td>
-                        <td> <input type="text" id="address" name="address"> </td>
-                    </tr>
-                    <tr>
-                        <td>State: &nbsp; </td>
-                        <td> <select id="state" name="state"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>City: &nbsp; </td>
-                        <td> <select id="city" name="city"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>JV/Distributer Name: &nbsp; </td>
-                        <td> <select id="jvName" name="jvName"></select> </td>
-                    </tr>
-                    <tr>
-                        <td>JV/Distributer Code: &nbsp; </td>
-                        <td> <select id="jvCode" name="jvCode"></select> </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="submit" name="submit" value="Edit LCO" id="submitButton"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-        
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6">
+			    <table class="tablechange">
+			        <tbody>
+			            <tr>
+			                <td><input type="file" id="kyc" name="kyc"> </td>
+			                <td><input type="button" id="uploadKyc" value="Upload Kyc"></td>
+			            </tr>
+						
+			            <tr>
+			                <td><input type="file" id="agreement" name="agreement"> </td>
+			                <td><input type="button" id="uploadAgreement" value="Upload Agreement"></td>
+			            </tr>
+			         </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </body>
 </html> 

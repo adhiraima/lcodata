@@ -15,6 +15,8 @@ import entity.Employee;
 import entity.Lco;
 import entity.LcoData;
 
+import vo.EmployeeVO;
+
 /**
  * @author adhiraima
  *
@@ -45,5 +47,14 @@ public class LandingController extends Controller {
 	
 	public static Result getEmployee(String employeeId) {
 		return ok(Json.toJson(Employee.findEmployeeeById(employeeId).getVO()));
+	}
+	
+	public static Result getEmployees() {
+		List<Employee> employees = Employee.findAll();
+		List<EmployeeVO> vos = new ArrayList<EmployeeVO>();
+		for (Employee employee : employees) {
+			vos.add(employee.getVO());
+		}
+		return ok(Json.toJson(vos));
 	}
 }

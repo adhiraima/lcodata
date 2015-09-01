@@ -1,11 +1,45 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
     <head>
         <title>Loading content with AJAX</title>
         <meta charset="utf-8">
+
+        <link href="../stylesheets/DenStyle.css" rel="stylesheet" type="text/css" />
+        <link href="../stylesheets/ThemeForms/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- MetisMenu CSS -->
+        <link href="../stylesheets/ThemeForms/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="../stylesheets/ThemeForms/dist/css/sb-admin-2.css" rel="stylesheet">
+        <!-- Custom Fonts -->
+        <link href="../stylesheets/ThemeForms/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+
         <script src="../javascripts/jquery-2.1.1.min.js"></script>
         <script>
-        $(document).ready(function() {
+		function goBack() {
+			window.history.back();
+		}
+		function removeLco(lco) {
+		    console.log("remove called...");
+			$.ajax({
+				type: 'DELETE',
+				url: '/api/lco/'+$(lco).attr('id'),
+				//dataType: "json",
+				//async:false,
+				success: function(data) {
+					//do something
+					location.reload();
+				},
+				error: function(data) {
+					//do something
+					location.reload();
+				}
+				
+			});
+		}
+		$(document).ready(function() {
+			
         	function getParameterByName(name) {
 			    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 			    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -40,7 +74,7 @@
 						  	+ "</td><td>" 
 						  	+ data[i].lcoName 
 						  	+ "</td>"
-						  	+"<td><a href=\"edit.html?lcoCode="+data[i].lcoCode+"\" >" 
+						  	+"<td><a href=\"edit.html?lcoCode="+data[i].lcoCode+"\" title=\"Edit LCO Details\" >" 
 						  	+ data[i].lcoCode 
 						  	+ "</a></td><td>" 
 						  	+ data[i].address 
@@ -79,7 +113,10 @@
 						  	+ data[i].agreementId 
 						  	+ "</td><td>" 
 						  	+ data[i].kycId 
-						  	+ "</td>"	
+						  	+ "</td>"
+							+"<td>" 
+						  	+ "<button id='"+data[i].lcoCode+"' onclick='removeLco(this);'>Remove</button>" 
+						  	+ "</td>"							
 						  	+"</tr>";
 						
 						$(searchResults).append(html);
@@ -92,18 +129,47 @@
     </script>
          
     </head>
-    <body>
-        <a class="offline-button" href="../index.html">Back</a>
+    <body class="formbackground">
+        <header class="main-header">
+            <div>
+                <div class="float-left">
+                    <a href="index2.html" class="logo">
+                        <img src="../stylesheets/DENImages/den_corp_logo.png" height="40px" />
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <a class="offline-button" onclick="goBack()">Back</a>
         <a class="offline-button" id="addHref" href="">Add LCO</a></br></br>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                   
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
         Employee Id: <input type="text" name="employeeId" id="employeeId" readonly></br>
         Employee Name: <input type="text" name="employeeName" id="employeeName" readonly></br>
         Employee Email: <input type="text" name="employeeEmail" id="employeeEmail" readonly>
         </br></br>
-        <table id="searchResults" border="1px">
+       </div>
+	    </div>
+		 </div>
+		  </div>
+		   </div>
+		    </div>
+      
+		
+
+
+        
+        
+         <table id="searchResults" border="1px" class="font-change">
         	<thead>
 	        	<tr>
-	        		<td>serialNumber</td>
-	        		<td>lcoName</td>
+	        		<td>S No</td>
+	        		<td> lcoName </td>
 	        		<td>lcoCode</td>
 	        		<td>address</td>
 	        		<td>jvCode</td>
@@ -120,6 +186,7 @@
 	        		<td>employeeId</td>
 	        		<td>agreementId</td>
 	        		<td>kycId</td>
+					<td></td>
 	        	</tr>
         	</thead>
         	<tbody>

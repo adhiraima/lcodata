@@ -53,10 +53,10 @@ public class LcoData extends Model {
 	private String oldAopLocation;
 
 	@Column(name = "agreement")
-	private long agreementId;
+	private String agreementId;
 
 	@Column(name = "kycId")
-	private long kycId;
+	private String kycId;
 
 	@SuppressWarnings({"deprecation" })
 	private static Finder<Long, LcoData> find = new Finder<Long, LcoData>(
@@ -76,6 +76,10 @@ public class LcoData extends Model {
 			lcocodes.add(lco.getLcoCode());
 		}
 		return find.where().in("lcoCode", lcocodes).findList();
+	}
+	
+	public static LcoData findByLcoCode(String lcoCode) {
+		return find.where().eq("lcoCode", lcoCode).findUnique();
 	}
 
 	public Long getSerialNumber() {
@@ -143,19 +147,19 @@ public class LcoData extends Model {
 		this.oldAopLocation = oldAopLocation;
 	}
 
-	public long getAgreementId() {
+	public String getAgreementId() {
 		return agreementId;
 	}
 
-	public void setAgreementId(long agreementId) {
+	public void setAgreementId(String agreementId) {
 		this.agreementId = agreementId;
 	}
 
-	public long getKycId() {
+	public String getKycId() {
 		return kycId;
 	}
 
-	public void setKycId(long kycId) {
+	public void setKycId(String kycId) {
 		this.kycId = kycId;
 	}
 
@@ -172,17 +176,22 @@ public class LcoData extends Model {
 			vo.state = State.findById(lco.getState()).getName();
 			vo.city = City.findById(lco.getCity()).getCityName();
 			vo.employeeId = lco.getEmployeeId();
+			vo.address = lco.getAddress();
+			JV jv = null;
+			if (null != lco.getJvCode() && null != JV.findByCJVCode(lco.getJvCode()))
+				jv = JV.findByCJVCode(lco.getJvCode());
+			if (null != jv) {
+				vo.jvCode = jv.getJvCode();
+				vo.jvName = jv.getJvName();
+			} else {
+				vo.jvCode = StringUtils.EMPTY;
+				vo.jvName = StringUtils.EMPTY;
+			}
 		}
 		vo.oldAopLocation = this.oldAopLocation;
 		vo.pincode = this.pincode;
-		JV jv = JV.findByCJVCode(lco.getJvCode());
-		if (null != jv) {
-			vo.jvCode = jv.getJvCode();
-			vo.jvName = jv.getJvName();
-		} else {
-			vo.jvCode = StringUtils.EMPTY;
-			vo.jvName = StringUtils.EMPTY;
-		}
+		
+		
 		
 		vo.dealerTypeId = this.getDealerTypeId();
 		vo.kycId = this.kycId;

@@ -3,6 +3,8 @@
  */
 package entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -64,6 +66,10 @@ public class Employee extends Model {
 	
 	public static Employee findEmployeeByEmail(String email) {
 		return find.where().eq("email", email).findUnique();
+	}
+	
+	public static List<Employee> findAll() {
+		return find.all();
 	}
 	
 	public EmployeeVO getVO() {

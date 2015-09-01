@@ -76,5 +76,12 @@ INSERT INTO `lcodatabase`.`city` (`state_id`, `city_name`) VALUES ('4', 'Rajasth
 
 
 INSERT INTO `lcodatabase`.`employee` (`employee_id`, `name`, `email`) VALUES ('100011', 'Adhir', 'adhir@suventure.com');
-INSERT INTO `lcodatabase`.`employee` (`employee_id`, `name`) VALUES ('100012', 'Dipankar', 'dipankar@suventure.in');
+INSERT INTO `lcodatabase`.`employee` (`employee_id`, `name`, `email`) VALUES ('100012', 'Dipankar', 'dipankar@suventure.in');
 
+insert into jv (jv_code, jv_name) values ('DBKNP03', 'DEN Ambey Cable Networks Pvt. Ltd.');
+insert into jv (jv_code, jv_name) values ('JVBHD001', 'Bhadohi DEN Entertainment Pvt. Ltd.');
+insert into jv (jv_code, jv_name) values ('JVKNP01', 'DEN AMBEY');
+insert into jv (jv_code, jv_name) values ('JVKNP02', 'DEN Ambey Jhansi Cable Network Pvt. Ltd. -Jhansi');
+insert into jv (jv_code, jv_name) values ('JVKNP03', 'DEN Ambey Cable Networks Pvt. Ltd. Etawah');
+insert into jv (jv_code, jv_name) values ('JVKNP04', 'Star Channel DEN Network Pvt. Ltd. Banda');
+insert into jv (jv_code, jv_name) values ('JVKNP05', 'Seturn Digital Cable PVt. Ltd. Fatehpur');

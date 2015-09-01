@@ -30,6 +30,6 @@ public class LcoDataVO implements Serializable {
 	public Long dealerTypeId;
 	public String oldAopLocation;
 	public Long employeeId;
-	public long agreementId;
-	public long kycId;
+	public String agreementId;
+	public String kycId;
 }
