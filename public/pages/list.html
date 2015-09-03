@@ -68,13 +68,13 @@
 						  	+ "</td><td><a href=\"lcoemp.html?employeeId="+data[i].employeeId+"\" title=\"Edit Employee Details\" >"
 						  	+ data[i].employeeId 
 						  	+ "</a></td>"
-						  	+"<td><a target=\"_blank\" href=\"http:\\localhost:9000\agreement\" 
+						  	+"<td><a target=\"_blank\" href=\"http://localhost:9000/agreement/" 
 						  	+ data[i].agreementId 
-						  	+ "\">open agreement</a></td><td><a target=\"_blank\" href=\"http:\\localhost:9000\kyc\" 
+						  	+ "\">open agreement</a></td><td><a target=\"_blank\" href=\"http://localhost:9000/kyc/" 
 						  	+ data[i].kycId 
 						  	+ "\">open Kyc</a></td>"	
 						  	+"</tr>";
-						
+						console.log(html);
 						$(searchResults).append(html);
 						
 		            }
