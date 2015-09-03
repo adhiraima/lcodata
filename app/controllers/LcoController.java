@@ -79,7 +79,7 @@ public class LcoController extends Controller {
 		Map<String, String> fileName = new JSONDeserializer<Map<String, String>>().deserialize(
                 request().body().asJson().toString(), Map.class);
 		LcoData lco = LcoData.findByLcoCode(lcoCode);
-		lco.setAgreementId(fileName.get("file").replace("fakepath", "agreement").replace("\\", "\\\\"));
+		lco.setAgreementId(fileName.get("file").substring(fileName.get("file").lastIndexOf("\\"), fileName.get("file").length() -1));
 		Ebean.update(lco);
 		jsonRes.put("successMessage", "file Uploaded!!");
 		return ok(Json.toJson(jsonRes));
@@ -90,7 +90,7 @@ public class LcoController extends Controller {
 		Map<String, String> fileName = new JSONDeserializer<Map<String, String>>().deserialize(
                 request().body().asJson().toString(), Map.class);
 		LcoData lco = LcoData.findByLcoCode(lcoCode);
-		lco.setKycId(fileName.get("file").replace("fakepath", "kyc").replace("\\", "\\\\"));
+		lco.setKycId(fileName.get("file").substring(fileName.get("file").lastIndexOf("\\"), fileName.get("file").length() -1));
 		Ebean.update(lco);
 		jsonRes.put("successMessage", "file Uploaded!!");
 		return ok(Json.toJson(jsonRes));
