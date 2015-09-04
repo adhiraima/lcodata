@@ -1,8 +1,12 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Loading content with AJAX</title>
+    <title>LCO Master List</title>
     <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	
     <script src="../javascripts/jquery-2.1.1.min.js"></script>
     <link href="../stylesheets/DenStyle.css" rel="stylesheet" type="text/css" />
     <link href="../stylesheets/ThemeForms/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,9 +17,9 @@
         <!-- Custom Fonts -->
         <link href="../stylesheets/ThemeForms/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <script  type="text/javascript">
-	function goBack() {
-				window.history.back();
-			}
+		function goBack() {
+			window.history.back();
+		}
         $(document).ready(function() {
 				$.ajax({
 		        type: 'GET',
