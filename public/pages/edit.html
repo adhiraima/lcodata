@@ -16,9 +16,9 @@
 
     
     <script>
-			function goBack() {
-				window.history.back();
-			}
+		function goBack() {
+			window.open('/pages/list.html');
+		}
         $( document ).ready(function() {
 			
         	function getParameterByName(name) {
@@ -220,7 +220,7 @@
         </div>
     </header>
 
-    <a class="offline-button" onclick="goBack()">Back</a>
+    <a class="offline-button" onclick="goBack()">Back To List</a>
     <span id="messages"></span>
     <form id="lcoForm" action="/api/lco/update" method="POST">
 
