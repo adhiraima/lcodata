@@ -13,7 +13,8 @@ libraryDependencies ++= Seq(
   evolutions,
   jdbc,
   "net.sf.flexjson" % "flexjson" % "3.2",
-  "mysql" % "mysql-connector-java" % "5.1.34"
+  "mysql" % "mysql-connector-java" % "5.1.34",
+  "net.sourceforge.jtds" % "jtds" % "1.3.1"
 )
 
 
